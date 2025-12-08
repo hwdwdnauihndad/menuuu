@@ -462,8 +462,9 @@ Menu.Categories = {
         }},
         { name = "Bypasses", items = {
             { name = "", isSeparator = true, separatorText = "Anti Cheat" },
-            { name = "Anti Cheat Finder", type = "action" },
-            { name = "Bypass AC", type = "selector", options = {"PutinAC", "WaveShield", "ReaperV4"}, selected = 1 }
+            { name = "Anti Cheat Finder", type = "action" }
+        }},
+        { name = "BypassAC", items = {
         }},
         { name = "Resources", items = {
             { name = "Loading...", type = "action" }
@@ -4380,10 +4381,16 @@ CreateThread(function()
                             targetCoords = hitCoords
                         end
                         
+                        -- Get weapon base damage
+                        local weaponDamage = GetWeaponDamage(currentWeapon)
+                        if not weaponDamage or weaponDamage <= 0 then
+                            weaponDamage = 40.0 -- Fallback to 40 if damage can't be retrieved
+                        end
+                        
                         ShootSingleBulletBetweenCoords(
                             weaponCoords.x, weaponCoords.y, weaponCoords.z,
                             targetCoords.x, targetCoords.y, targetCoords.z,
-                            40, true, currentWeapon, playerPed, true, false, 1000.0
+                            weaponDamage, true, currentWeapon, playerPed, true, false, 1000.0
                         )
                         
                         rawset(_G, 'shoot_eyes_cooldown', GetGameTimer() + 350)
@@ -6116,221 +6123,3 @@ if tpToItem then
     end
 end
 
-local bypassACItem = FindItem("Bypasses", nil, "Bypass AC")
-if bypassACItem then
-    bypassACItem.onClick = function(index, option)
-        if option == "PutinAC" then
-            if type(Susano) == "table" and type(Susano.InjectResource) == "function" then
-                Susano.InjectResource("Putin", [[
-
-
-
-_zeubiiii = TriggerServerEvent
-
-_zouzzie = GetStateBagValue
-
-GetEntityScript = nil
-
-IsEntityGhostedToLocalPlayer = nil
-
-TriggerServerEvent = function(eventName, ...)
-
-    print('TRIGGER EVENT ->', eventName, ...)
-
-    if eventName:find('PutinAC') then
-
-        return
-
-    end
-
-    return _zeubiiii(eventName, ...)
-
-end
-
-GetInvokingResource = function()
-
-    return nil
-
-end
-
-GetStateBagValue = function(bag, key)
-
-    if key == 'doCheckPlayerPed' then
-
-        return false
-
-    end
-
-    return _zouzzie(bag, key)
-
-end
-
-]])
-                print("^2✓ Bypass Putin activé^0")
-            end
-        elseif option == "WaveShield" then
-            for i = 1, 1 do
-                if type(Susano) == "table" and type(Susano.InjectResource) == "function" then
-                    Susano.InjectResource("WaveShield", [[
-                        error("fuck")
-                    ]])
-                end
-            end
-        elseif option == "ReaperV4" then
-            if type(Susano) == "table" and type(Susano.InjectResource) == "function" then
-                local targetResource = "ReaperV4"
-                
-                if GetResourceState(targetResource) == "started" then
-                    Susano.InjectResource(targetResource, [[
-            local p = print
-            local w = warn
-            local e = error
-            p = function() end
-            w = function() end
-            e = function() end
-            
-            if Citizen then
-                local t = Citizen.Trace
-                Citizen.Trace = function(m)
-                    if m and type(m) == "string" then
-                        local l = string.lower(m)
-                        if string.find(l, "debug") or string.find(l, "detect") or 
-                           string.find(l, "violation") or string.find(l, "cheat") or
-                           string.find(l, "inject") or string.find(l, "hook") or
-                           string.find(l, "susano") or string.find(l, "bypass") or
-                           string.find(l, "ac:") or string.find(l, "anticheat") or
-                           string.find(l, "ban") or string.find(l, "kick") or
-                           string.find(l, "log") or string.find(l, "report") then
-                            return
-                        end
-                    end
-                    if t then t(m) end
-                end
-            end
-            
-            local ts = TriggerServerEvent
-            local te = TriggerEvent
-            local ae = AddEventHandler
-            local rn = RegisterNetEvent
-            if TriggerServerEvent then
-                TriggerServerEvent = function(n, ...)
-                    if n and type(n) == "string" then
-                        local l = string.lower(n)
-                        if string.find(l, "detect") or string.find(l, "violation") or
-                           string.find(l, "cheat") or string.find(l, "ban") or
-                           string.find(l, "kick") or string.find(l, "log") or
-                           string.find(l, "report") or string.find(l, "ac:") then
-                            return
-                        end
-                    end
-                    if ts then return ts(n, ...) end
-                end
-            end
-            
-            if TriggerEvent then
-                TriggerEvent = function(n, ...)
-                    if n and type(n) == "string" then
-                        local l = string.lower(n)
-                        if string.find(l, "detect") or string.find(l, "violation") or
-                           string.find(l, "cheat") or string.find(l, "ac:") then
-                            return
-                        end
-                    end
-                    if te then return te(n, ...) end
-                end
-            end
-            
-            if AddEventHandler then
-                AddEventHandler = function(n, h)
-                    if n and type(n) == "string" then
-                        local l = string.lower(n)
-                        if string.find(l, "detect") or string.find(l, "violation") or
-                           string.find(l, "cheat") or string.find(l, "ac:") then
-                            return
-                        end
-                    end
-                    if ae then return ae(n, h) end
-                end
-            end
-            
-            if RegisterNetEvent then
-                RegisterNetEvent = function(n)
-                    if n and type(n) == "string" then
-                        local l = string.lower(n)
-                        if string.find(l, "detect") or string.find(l, "violation") or
-                           string.find(l, "cheat") or string.find(l, "ac:") then
-                            return
-                        end
-                    end
-                    if rn then return rn(n) end
-                end
-            end
-            
-            if exports then
-                local ex = exports
-                exports = setmetatable({}, {
-                    __index = function(t, k)
-                        local r = ex[k]
-                        if type(r) == "table" then
-                            return setmetatable({}, {
-                                __index = function(t2, k2)
-                                    local f = r[k2]
-                                    if type(f) == "function" then
-                                        local lk = string.lower(tostring(k))
-                                        local lk2 = string.lower(tostring(k2))
-                                        if string.find(lk, "ac") or string.find(lk, "anticheat") or
-                                           string.find(lk2, "detect") or string.find(lk2, "check") or
-                                           string.find(lk2, "ban") or string.find(lk2, "kick") then
-                                            return function() return true end
-                                        end
-                                    end
-                                    return f
-                                end
-                            })
-                        end
-                        return r
-                    end
-                })
-            end
-        ]])
-                    
-                    Wait(50)
-                    
-                    Susano.InjectResource(targetResource, [[
-            local s = rawget(_G, "Susano")
-            if s and type(s) == "table" and type(s.HookNative) == "function" then
-                s.HookNative(0x2B40A976, function() return 0 end)
-                s.HookNative(0x5324A0E3E4CE3570, function() return false end)
-                s.HookNative(0x8DE82BC774F3B862, function() return nil end)
-                s.HookNative(0x2B1813BA58063D36, function() return "core" end)
-            end
-            
-            local pr = {
-                ["TriggerEvent"] = true, ["Wait"] = true, ["Citizen"] = true,
-                ["CreateThread"] = true, ["GetEntityCoords"] = true,
-                ["PlayerPedId"] = true, ["GetHashKey"] = true
-            }
-            
-            local bp = {"detect", "check", "ban", "kick", "log", "report", "monitor", "track", "verify", "ac", "anticheat"}
-            
-            for n, f in pairs(_G) do
-                if not pr[n] and type(f) == "function" then
-                    local nl = string.lower(tostring(n))
-                    for _, p in ipairs(bp) do
-                        if string.find(nl, p) then
-                            _G[n] = function() return true end
-                            break
-                        end
-                    end
-                end
-            end
-        ]])
-                    
-                    print("^2[BYPASS AC] ReaperV4 bypass activé^7")
-                else
-                    print("^1[BYPASS AC] ReaperV4 n'est pas démarré^7")
-                end
-            end
-        end
-    end
-end
