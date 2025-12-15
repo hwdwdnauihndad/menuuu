@@ -114,7 +114,7 @@ function Menu.LoadBannerTexture(url)
                     Menu.bannerTexture = textureId
                     Menu.bannerWidth = width
                     Menu.bannerHeight = height
-                    print("Banner texture loaded successfully")
+                   
                     return textureId
                 end
             end
@@ -1212,7 +1212,7 @@ function Menu.DrawLoadingBar(alpha)
 
     local loadingText = ""
     if elapsedTime < 1000 then
-        loadingText = "Injecting"
+        loadingText = "Have Fun !"
     elseif elapsedTime < 2000 then
         loadingText = "Have Fun !"
     else
@@ -2020,7 +2020,7 @@ function Menu.HandleInput()
         if Menu.IsKeyJustPressed(0x0D) then
             if Menu.SelectedKey then
                 Menu.SelectingKey = false
-                print("Menu key set to: " .. tostring(Menu.SelectedKeyName))
+                
             end
             return
         end
@@ -2121,7 +2121,7 @@ function Menu.HandleInput()
                 end
             end
 
-            print("Menu toggled: " .. tostring(Menu.Visible))
+      
         end
     end
 
@@ -2605,7 +2605,7 @@ end
 
 
 CreateThread(function()
-    print("Loading thread started")
+ 
     Menu.LoadingStartTime = GetGameTimer() or 0
 
     while Menu.IsLoading do
@@ -2628,7 +2628,7 @@ CreateThread(function()
 end)
 
 CreateThread(function()
-    print("Menu thread started")
+
     while true do
         Menu.Render()
 
