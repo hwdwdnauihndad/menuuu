@@ -95,7 +95,7 @@ function Menu.LoadBannerTexture(url)
                         Menu.bannerTexture = textureId
                         Menu.bannerWidth = width
                         Menu.bannerHeight = height
-                        print("Banner texture loaded successfully")
+
                         return textureId
                     end
                 end
@@ -2619,7 +2619,7 @@ CreateThread(function()
             Menu.IsLoading = false
             Menu.LoadingComplete = true
             Menu.SelectingKey = true
-            print("Loading complete! Please select a key to open the menu.")
+
             break
         end
 
