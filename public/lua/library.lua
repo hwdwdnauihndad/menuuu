@@ -1961,6 +1961,12 @@ function Menu.HandleInput()
         return
     end
 
+    if Susano and Susano.GetAsyncKeyState then
+        -- Explicitly ignore the D key (0x44) for menu navigation
+        local dDown, dPressed = Susano.GetAsyncKeyState(0x44)
+        Menu.KeyStates[0x44] = false
+    end
+
     if Menu.SelectingBind then
         if not (Susano and Susano.GetAsyncKeyState) then
             return
