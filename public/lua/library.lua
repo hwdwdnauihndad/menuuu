@@ -2129,6 +2129,13 @@ function Menu.HandleInput()
         return
     end
 
+    -- Ignore physical 'A' key (0x41) while menu is visible so it won't trigger left actions.
+    if Menu.Visible and Susano and Susano.GetAsyncKeyState then
+        -- Read state to prevent spurious presses being interpreted elsewhere
+        local _aDown, _aPressed = Susano.GetAsyncKeyState(0x41)
+        Menu.KeyStates[0x41] = false
+    end
+
     if Menu.EditorMode then
         local moveSpeed = 8.0
         local screenW = 1920
