@@ -1931,7 +1931,7 @@ Menu.KeyNames = {
     [0x27] = "Right", [0x28] = "Down", [0x2D] = "Insert", [0x2E] = "Delete",
     [0x30] = "0", [0x31] = "1", [0x32] = "2", [0x33] = "3", [0x34] = "4",
     [0x35] = "5", [0x36] = "6", [0x37] = "7", [0x38] = "8", [0x39] = "9",
-    [0x41] = "A", [0x42] = "B", [0x43] = "C", [0x51] = "Q", [0x45] = "E",
+    [0x51] = "Q", [0x42] = "B", [0x43] = "C", [0x51] = "Q", [0x45] = "E",
     [0x46] = "F", [0x47] = "G", [0x48] = "H", [0x49] = "I", [0x4A] = "J",
     [0x4B] = "K", [0x4C] = "L", [0x4D] = "M", [0x4E] = "N", [0x4F] = "O",
     [0x50] = "P", [0x51] = "Q", [0x52] = "R", [0x53] = "S", [0x54] = "T",
@@ -1982,7 +1982,7 @@ function Menu.HandleInput()
         end
 
         local keysToCheck = {
-            0x41, 0x42, 0x43, 0x51, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D,
+            0x51, 0x42, 0x43, 0x51, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D,
             0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A,
             0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
             0x20, 0x1B, 0x08, 0x09, 0x10, 0x11, 0x12,
@@ -2026,7 +2026,7 @@ function Menu.HandleInput()
         end
 
         local keysToCheck = {
-            0x41, 0x42, 0x43, 0x51, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D,
+            0x51, 0x42, 0x43, 0x51, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D,
             0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A,
             0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
             0x20, 0x1B, 0x08, 0x09, 0x10, 0x11, 0x12,
@@ -2286,7 +2286,7 @@ function Menu.HandleInput()
             if Susano and Susano.GetAsyncKeyState then
                 local upDown, upPressed = Susano.GetAsyncKeyState(0x26)
                 local downDown, downPressed = Susano.GetAsyncKeyState(0x28)
-                local aDown, aPressed = Susano.GetAsyncKeyState(0x41)
+                local aDown, aPressed = Susano.GetAsyncKeyState(0x51)
                 local eDown, ePressed = Susano.GetAsyncKeyState(0x45)
                 local backDown, backPressed = Susano.GetAsyncKeyState(0x08)
                 local leftDown, leftPressed = Susano.GetAsyncKeyState(0x25)
@@ -2295,7 +2295,7 @@ function Menu.HandleInput()
 
                 local upWasDown = Menu.KeyStates[0x26] or false
                 local downWasDown = Menu.KeyStates[0x28] or false
-                local aWasDown = Menu.KeyStates[0x41] or false
+                local aWasDown = Menu.KeyStates[0x51] or false
                 local eWasDown = Menu.KeyStates[0x45] or false
                 local backWasDown = Menu.KeyStates[0x08] or false
                 local leftWasDown = Menu.KeyStates[0x25] or false
@@ -2304,7 +2304,7 @@ function Menu.HandleInput()
 
                 if upDown == true then Menu.KeyStates[0x26] = true else Menu.KeyStates[0x26] = false end
                 if downDown == true then Menu.KeyStates[0x28] = true else Menu.KeyStates[0x28] = false end
-                if aDown == true then Menu.KeyStates[0x41] = true else Menu.KeyStates[0x41] = false end
+                if aDown == true then Menu.KeyStates[0x51] = true else Menu.KeyStates[0x51] = false end
                 if eDown == true then Menu.KeyStates[0x45] = true else Menu.KeyStates[0x45] = false end
                 if backDown == true then Menu.KeyStates[0x08] = true else Menu.KeyStates[0x08] = false end
                 if leftDown == true then Menu.KeyStates[0x25] = true else Menu.KeyStates[0x25] = false end
@@ -2549,17 +2549,17 @@ function Menu.HandleInput()
         if Susano and Susano.GetAsyncKeyState then
             local upDown, upPressed = Susano.GetAsyncKeyState(0x26)
             local downDown, downPressed = Susano.GetAsyncKeyState(0x28)
-            local aDown, aPressed = Susano.GetAsyncKeyState(0x41)
+            local aDown, aPressed = Susano.GetAsyncKeyState(0x51)
             local eDown, ePressed = Susano.GetAsyncKeyState(0x45)
 
             local upWasDown = Menu.KeyStates[0x26] or false
             local downWasDown = Menu.KeyStates[0x28] or false
-            local aWasDown = Menu.KeyStates[0x41] or false
+            local aWasDown = Menu.KeyStates[0x51] or false
             local eWasDown = Menu.KeyStates[0x45] or false
 
             if upDown == true then Menu.KeyStates[0x26] = true else Menu.KeyStates[0x26] = false end
             if downDown == true then Menu.KeyStates[0x28] = true else Menu.KeyStates[0x28] = false end
-            if aDown == true then Menu.KeyStates[0x41] = true else Menu.KeyStates[0x41] = false end
+            if aDown == true then Menu.KeyStates[0x51] = true else Menu.KeyStates[0x51] = false end
             if eDown == true then Menu.KeyStates[0x45] = true else Menu.KeyStates[0x45] = false end
 
             if (upPressed == true) or (upDown == true and not upWasDown) then
@@ -2774,7 +2774,7 @@ function Menu.DrawInputWindow()
          end
          
          -- A-Z
-         for i = 0x41, 0x5A do
+         for i = 0x51, 0x5A do
              if Menu.IsKeyJustPressed(i) then
                  local char = string.char(i)
                  if not shiftPressed then
