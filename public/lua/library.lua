@@ -1960,7 +1960,6 @@ Menu.KeyNames = {
     [0xA4] = "Left Alt", [0xA5] = "Right Alt"
 }
 
-
 function Menu.GetKeyName(keyCode)
     return Menu.KeyNames[keyCode] or ("Key 0x" .. string.format("%02X", keyCode))
 end
