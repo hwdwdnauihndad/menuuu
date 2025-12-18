@@ -421,37 +421,35 @@ function Menu.DrawTabs(category, x, startY, width, tabHeight)
         local scaledTextSize = textSize * scale
         local textY = startY + tabHeight / 2 - (scaledTextSize / 2) + (1 * scale)
         local textWidth = 0
-        if Susano and Susano.GetTextWidth then
-            textWidth = Susano.GetTextWidth(tab.name, scaledTextSize)
-        else
-            textWidth = string.len(tab.name) * 9 * scale
-        end
-        local textX = tabX + (currentTabWidth / 2) - (textWidth / 2)
-        Menu.DrawText(textX, textY, tab.name, textSize, Menu.Colors.TextWhite.r / 255.0, Menu.Colors.TextWhite.g / 255.0, Menu.Colors.TextWhite.b / 255.0, 1.0)
+        if Susano and Susano.GetAsyncKeyState then
+            local upDown, upPressed = Susano.GetAsyncKeyState(0x26)
+            local downDown, downPressed = Susano.GetAsyncKeyState(0x28)
+            local qDown, qPressed = Susano.GetAsyncKeyState(0x51)
+            local eDown, ePressed = Susano.GetAsyncKeyState(0x45)
 
-        currentX = currentX + tabWidth
-    end
-end
+            local upWasDown = Menu.KeyStates[0x26] or false
+            local downWasDown = Menu.KeyStates[0x28] or false
+            local qWasDown = Menu.KeyStates[0x51] or false
+            local leftWasDown = qWasDown
+            local eWasDown = Menu.KeyStates[0x45] or false
 
-local function findNextNonSeparator(items, startIndex, direction)
-    local index = startIndex
-    local attempts = 0
-    local maxAttempts = #items
+            if upDown == true then Menu.KeyStates[0x26] = true else Menu.KeyStates[0x26] = false end
+            if downDown == true then Menu.KeyStates[0x28] = true else Menu.KeyStates[0x28] = false end
+            local leftDown = (qDown == true)
+            if leftDown then Menu.KeyStates[0x51] = true else Menu.KeyStates[0x51] = false end
+            if eDown == true then Menu.KeyStates[0x45] = true else Menu.KeyStates[0x45] = false end
 
-    while attempts < maxAttempts do
-        index = index + direction
-        if index < 1 then
-            index = #items
+            if (upPressed == true) or (upDown == true and not upWasDown) then
         elseif index > #items then
             index = 1
         end
 
-        if items[index] and not items[index].isSeparator then
+            elseif (downPressed == true) or (downDown == true and not downWasDown) then
             return index
         end
 
         attempts = attempts + 1
-    end
+            elseif (qPressed == true) or (leftDown == true and not leftWasDown) then
 
     return startIndex
 end
