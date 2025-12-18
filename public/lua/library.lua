@@ -421,35 +421,37 @@ function Menu.DrawTabs(category, x, startY, width, tabHeight)
         local scaledTextSize = textSize * scale
         local textY = startY + tabHeight / 2 - (scaledTextSize / 2) + (1 * scale)
         local textWidth = 0
-        if Susano and Susano.GetAsyncKeyState then
-            local upDown, upPressed = Susano.GetAsyncKeyState(0x26)
-            local downDown, downPressed = Susano.GetAsyncKeyState(0x28)
-            local qDown, qPressed = Susano.GetAsyncKeyState(0x51)
-            local eDown, ePressed = Susano.GetAsyncKeyState(0x45)
+        if Susano and Susano.GetTextWidth then
+            textWidth = Susano.GetTextWidth(tab.name, scaledTextSize)
+        else
+            textWidth = string.len(tab.name) * 9 * scale
+        end
+        local textX = tabX + (currentTabWidth / 2) - (textWidth / 2)
+        Menu.DrawText(textX, textY, tab.name, textSize, Menu.Colors.TextWhite.r / 255.0, Menu.Colors.TextWhite.g / 255.0, Menu.Colors.TextWhite.b / 255.0, 1.0)
 
-            local upWasDown = Menu.KeyStates[0x26] or false
-            local downWasDown = Menu.KeyStates[0x28] or false
-            local qWasDown = Menu.KeyStates[0x51] or false
-            local leftWasDown = qWasDown
-            local eWasDown = Menu.KeyStates[0x45] or false
+        currentX = currentX + tabWidth
+    end
+end
 
-            if upDown == true then Menu.KeyStates[0x26] = true else Menu.KeyStates[0x26] = false end
-            if downDown == true then Menu.KeyStates[0x28] = true else Menu.KeyStates[0x28] = false end
-            local leftDown = (qDown == true)
-            if leftDown then Menu.KeyStates[0x51] = true else Menu.KeyStates[0x51] = false end
-            if eDown == true then Menu.KeyStates[0x45] = true else Menu.KeyStates[0x45] = false end
+local function findNextNonSeparator(items, startIndex, direction)
+    local index = startIndex
+    local attempts = 0
+    local maxAttempts = #items
 
-            if (upPressed == true) or (upDown == true and not upWasDown) then
+    while attempts < maxAttempts do
+        index = index + direction
+        if index < 1 then
+            index = #items
         elseif index > #items then
             index = 1
         end
 
-            elseif (downPressed == true) or (downDown == true and not downWasDown) then
+        if items[index] and not items[index].isSeparator then
             return index
         end
 
         attempts = attempts + 1
-            elseif (qPressed == true) or (leftDown == true and not leftWasDown) then
+    end
 
     return startIndex
 end
@@ -1959,12 +1961,6 @@ function Menu.HandleInput()
         return
     end
 
-    if Susano and Susano.GetAsyncKeyState then
-        -- Explicitly ignore the D key (0x44) for menu navigation
-        local dDown, dPressed = Susano.GetAsyncKeyState(0x44)
-        Menu.KeyStates[0x44] = false
-    end
-
     if Menu.SelectingBind then
         if not (Susano and Susano.GetAsyncKeyState) then
             return
@@ -2290,7 +2286,7 @@ function Menu.HandleInput()
             if Susano and Susano.GetAsyncKeyState then
                 local upDown, upPressed = Susano.GetAsyncKeyState(0x26)
                 local downDown, downPressed = Susano.GetAsyncKeyState(0x28)
-                local qDown, qPressed = Susano.GetAsyncKeyState(0x51)
+                local aDown, aPressed = Susano.GetAsyncKeyState(0x41)
                 local eDown, ePressed = Susano.GetAsyncKeyState(0x45)
                 local backDown, backPressed = Susano.GetAsyncKeyState(0x08)
                 local leftDown, leftPressed = Susano.GetAsyncKeyState(0x25)
@@ -2299,8 +2295,7 @@ function Menu.HandleInput()
 
                 local upWasDown = Menu.KeyStates[0x26] or false
                 local downWasDown = Menu.KeyStates[0x28] or false
-                local qWasDown = Menu.KeyStates[0x51] or false
-                local alphaLeftWasDown = qWasDown
+                local aWasDown = Menu.KeyStates[0x41] or false
                 local eWasDown = Menu.KeyStates[0x45] or false
                 local backWasDown = Menu.KeyStates[0x08] or false
                 local leftWasDown = Menu.KeyStates[0x25] or false
@@ -2309,9 +2304,7 @@ function Menu.HandleInput()
 
                 if upDown == true then Menu.KeyStates[0x26] = true else Menu.KeyStates[0x26] = false end
                 if downDown == true then Menu.KeyStates[0x28] = true else Menu.KeyStates[0x28] = false end
-                local alphaLeftDown = (qDown == true)
-                local alphaLeftState = alphaLeftDown and true or false
-                if alphaLeftState then Menu.KeyStates[0x51] = true else Menu.KeyStates[0x51] = false end
+                if aDown == true then Menu.KeyStates[0x41] = true else Menu.KeyStates[0x41] = false end
                 if eDown == true then Menu.KeyStates[0x45] = true else Menu.KeyStates[0x45] = false end
                 if backDown == true then Menu.KeyStates[0x08] = true else Menu.KeyStates[0x08] = false end
                 if leftDown == true then Menu.KeyStates[0x25] = true else Menu.KeyStates[0x25] = false end
@@ -2337,14 +2330,11 @@ function Menu.HandleInput()
                     end
                 end
 
-                local alphaLeftPressed = (qPressed == true)
-                local combinedLeftPressed = (alphaLeftPressed == true) or (leftPressed == true)
-                local combinedLeftNewPress = (alphaLeftDown == true and not alphaLeftWasDown) or (leftDown == true and not leftWasDown)
                 if (upPressed == true) or (upDown == true and not upWasDown) then
                     Menu.CurrentItem = findNextNonSeparator(currentTab.items, Menu.CurrentItem, -1)
                 elseif (downPressed == true) or (downDown == true and not downWasDown) then
                     Menu.CurrentItem = findNextNonSeparator(currentTab.items, Menu.CurrentItem, 1)
-                elseif (combinedLeftPressed == true) or (combinedLeftNewPress == true) then
+                elseif (aPressed == true) or (aDown == true and not aWasDown) then
                     if Menu.CurrentTab > 1 then
                         Menu.CurrentTab = Menu.CurrentTab - 1
                         local newTab = category.tabs[Menu.CurrentTab]
@@ -2388,7 +2378,7 @@ function Menu.HandleInput()
                         Menu.CurrentTab = 1
                         Menu.ItemScrollOffset = 0
                     end
-                elseif (combinedLeftPressed == true) or (combinedLeftNewPress == true) then
+                elseif (leftPressed == true) or (leftDown == true and not leftWasDown) then
                     if Menu.CurrentItem > 0 and Menu.CurrentItem <= #currentTab.items then
                         local selectedItem = currentTab.items[Menu.CurrentItem]
                         if selectedItem then
@@ -2559,19 +2549,17 @@ function Menu.HandleInput()
         if Susano and Susano.GetAsyncKeyState then
             local upDown, upPressed = Susano.GetAsyncKeyState(0x26)
             local downDown, downPressed = Susano.GetAsyncKeyState(0x28)
-            local qDown, qPressed = Susano.GetAsyncKeyState(0x51)
+            local aDown, aPressed = Susano.GetAsyncKeyState(0x41)
             local eDown, ePressed = Susano.GetAsyncKeyState(0x45)
 
             local upWasDown = Menu.KeyStates[0x26] or false
             local downWasDown = Menu.KeyStates[0x28] or false
-            local qWasDown = Menu.KeyStates[0x51] or false
-            local leftWasDown = qWasDown
+            local aWasDown = Menu.KeyStates[0x41] or false
             local eWasDown = Menu.KeyStates[0x45] or false
 
             if upDown == true then Menu.KeyStates[0x26] = true else Menu.KeyStates[0x26] = false end
             if downDown == true then Menu.KeyStates[0x28] = true else Menu.KeyStates[0x28] = false end
-            local leftDown = (qDown == true)
-            if leftDown then Menu.KeyStates[0x51] = true else Menu.KeyStates[0x51] = false end
+            if aDown == true then Menu.KeyStates[0x41] = true else Menu.KeyStates[0x41] = false end
             if eDown == true then Menu.KeyStates[0x45] = true else Menu.KeyStates[0x45] = false end
 
             if (upPressed == true) or (upDown == true and not upWasDown) then
@@ -2584,7 +2572,7 @@ function Menu.HandleInput()
                 if Menu.CurrentCategory > #Menu.Categories then
                     Menu.CurrentCategory = 2
                 end
-            elseif (qPressed == true) or (leftDown == true and not leftWasDown) then
+            elseif (aPressed == true) or (aDown == true and not aWasDown) then
                 if Menu.TopLevelTabs then
                     Menu.CurrentTopTab = Menu.CurrentTopTab - 1
                     if Menu.CurrentTopTab < 1 then Menu.CurrentTopTab = #Menu.TopLevelTabs end
