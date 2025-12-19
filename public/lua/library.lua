@@ -1343,7 +1343,7 @@ function Menu.DrawFooter()
     local scaledFooterSize = footerSize * scale
     local footerTextY = footerY + (footerHeight / 2) - (scaledFooterSize / 2) + (1 * scale)
 
-local footerText = "discord.gg/TRJNrpy2ma"
+local footerText = "korium.cc"
     local currentX = x + footerPadding
 
     local textWidth = 0
