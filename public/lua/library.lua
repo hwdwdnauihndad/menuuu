@@ -1343,27 +1343,8 @@ function Menu.DrawFooter()
     local scaledFooterSize = footerSize * scale
     local footerTextY = footerY + (footerHeight / 2) - (scaledFooterSize / 2) + (1 * scale)
 
-local updateTime = os.time() -- Spara tiden när koden startas/uppdateras
 local footerText = "discord.gg/TRJNrpy2ma"
-local currentX = x + footerPadding
-
--- Funktion för att beräkna dagar sedan uppdatering
-local function getDaysSinceUpdate()
-    local currentTime = os.time()
-    local timeDiff = currentTime - updateTime
-    local days = math.floor(timeDiff / (60 * 60 * 24)) -- Konvertera sekunder till dagar
-    
-    if days == 0 then
-        return "Uppdaterad idag"
-    elseif days == 1 then
-        return "Uppdaterad för 1 dag sen"
-    else
-        return string.format("Uppdaterad för %d dagar sen", days)
-    end
-end
-
--- Lägg till tidsinformation i footerText
-footerText = string.format("%s | %s", "discord.gg/TRJNrpy2ma", getDaysSinceUpdate())
+    local currentX = x + footerPadding
 
     local textWidth = 0
     if Susano and Susano.GetTextWidth then
