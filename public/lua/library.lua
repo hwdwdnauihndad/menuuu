@@ -1214,9 +1214,9 @@ function Menu.DrawLoadingBar(alpha)
     if elapsedTime < 1000 then
         loadingText = "Injecting"
     elseif elapsedTime < 2000 then
-        loadingText = "Loading bypass..."
+        loadingText = "Searching for AntiCheat..."
     else
-        loadingText = "Loading bypass..."
+        loadingText = "Loading Bypass..."
     end
 
     if loadingText ~= "" then
